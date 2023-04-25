@@ -11,12 +11,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
-            target: arm-unknown-linux-gnueabihf
-            bin: inputshare-server
-          - os: ubuntu-latest
-            target: armv7-unknown-linux-gnueabihf
-            bin: inputshare-server
           - os: windows-latest
             target: x86_64-pc-windows-msvc
             bin: inputshare-client
@@ -41,13 +35,6 @@ jobs:
           args: --release --locked --target=${{ matrix.target }} --bin=${{ matrix.bin }} --color=always --verbose
           use-cross: ${{ runner.os == 'Linux' }}
 
-      - name: Package (*nix)
-        if: runner.os != 'Windows'
-        run: >
-          tar -cv
-          License.md Readme.md
-          -C target/${{ matrix.target }}/release/ ${{ matrix.bin }}
-          | gzip --best > '${{ matrix.bin }}-${{ matrix.target }}.tar.gz'
       - name: Package (Windows)
         if: runner.os == 'Windows'
         run: >
